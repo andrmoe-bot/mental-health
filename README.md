@@ -1,4 +1,4 @@
-# Stillpoint
+# CBT Journal
 
 A private, single-user CBT reflection journal for a LAN or VPN. It has a thought record, a small activity planner, and a journal history. Journal entries are stored in a SQLite database on the host and shared across devices; the browser keeps only an authenticated session cookie.
 
@@ -25,6 +25,78 @@ Environment variables:
 | `COOKIE_SECURE` | `false` | Set to `true` when TLS terminates in front of the app |
 
 The session cookie is HttpOnly and SameSite=Strict. Sessions expire after 30 days or when the server restarts. Export personal data from **Data & settings** before upgrades or migrations. Keep database backups private.
+
+## Run as a systemd service
+
+These instructions assume a Linux host with systemd and Python 3.11 or newer. Copy the app files to `/opt/cbt-journal`; no internet access or package installation is needed on the host.
+
+Create a restricted service account and install the app files from your checkout:
+
+```sh
+sudo useradd --system --user-group --no-create-home --shell /usr/sbin/nologin cbtjournal
+sudo install -d -o root -g root -m 0755 /opt/cbt-journal
+sudo cp -a /path/to/mental-health/. /opt/cbt-journal/
+sudo chown -R root:root /opt/cbt-journal
+```
+
+Create a root-readable password file. Generate a long random password, then put it after `APP_PASSWORD=`:
+
+```sh
+openssl rand -hex 32
+sudo install -o root -g root -m 0600 /dev/null /etc/cbt-journal.env
+sudoedit /etc/cbt-journal.env
+```
+
+Example `/etc/cbt-journal.env`:
+
+```ini
+APP_PASSWORD=paste-the-generated-password-here
+COOKIE_SECURE=true
+```
+
+Use `COOKIE_SECURE=true` when HTTPS terminates at a reverse proxy in front of the app. This is recommended for LAN and VPN access. The app server itself speaks HTTP, so the proxy should preserve the request `Host` header. `COOKIE_SECURE=false` is only suitable for a trusted, isolated network.
+
+Create `/etc/systemd/system/cbt-journal.service`:
+
+```ini
+[Unit]
+Description=Personal CBT Journal
+After=network.target
+
+[Service]
+Type=simple
+User=cbtjournal
+Group=cbtjournal
+WorkingDirectory=/opt/cbt-journal
+EnvironmentFile=/etc/cbt-journal.env
+Environment=HOST=0.0.0.0
+Environment=PORT=8080
+Environment=DATA_DIR=/var/lib/cbt-journal
+Environment=PYTHONDONTWRITEBYTECODE=1
+StateDirectory=cbt-journal
+StateDirectoryMode=0700
+UMask=0077
+ExecStart=/usr/bin/python3 /opt/cbt-journal/server.py
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Enable it and check its status:
+
+```sh
+sudo systemctl daemon-reload
+sudo systemctl enable --now cbt-journal
+sudo systemctl status cbt-journal
+```
+
+The database is kept in `/var/lib/cbt-journal/journal.sqlite3`, outside the app directory. Check service logs with `sudo journalctl -u cbt-journal -f`. When updating the app, copy the new files to `/opt/cbt-journal` and restart the service; back up the database first.
 
 ## Content and licenses
 

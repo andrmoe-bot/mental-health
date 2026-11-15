@@ -197,7 +197,7 @@ view.addEventListener('click', async (event) => {
       const file = new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), entries: all }, null, 2)], { type: 'application/json' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(file);
-      link.download = `stillpoint-journal-${today()}.json`;
+      link.download = `cbt-journal-${today()}.json`;
       link.click();
       URL.revokeObjectURL(link.href);
       showToast('Your backup is ready');
