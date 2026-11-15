@@ -12,7 +12,7 @@ Requires Python 3.11 or newer. No third-party packages are needed.
 APP_PASSWORD='use-a-long-private-password' python3 server.py
 ```
 
-Open `http://<server-address>:8080` from your LAN or VPN. Because journal entries are sensitive, use an HTTPS reverse proxy for network access and set `COOKIE_SECURE=true`; plain HTTP exposes passwords and session cookies to anyone who can observe that network path. Set `DATA_DIR` to a persistent, backed-up directory if you run the app in a container. The SQLite database is `data/journal.sqlite3` by default and is not encrypted by the app, so keep it on a protected host or encrypted disk.
+For a manual run, open `http://<server-address>:8080`. The production systemd setup below serves the app at `http://<server-address>/` on port 80. Port 80 uses plain HTTP, which exposes passwords, session cookies, and journal traffic to anyone who can observe that network path. Use it only over an encrypted VPN or a trusted isolated LAN. For other network access, put an HTTPS reverse proxy in front of the app and set `COOKIE_SECURE=true`. Set `DATA_DIR` to a persistent, backed-up directory if you run the app in a container. The SQLite database is `data/journal.sqlite3` by default and is not encrypted by the app, so keep it on a protected host or encrypted disk.
 
 Environment variables:
 
@@ -51,10 +51,10 @@ Example `/etc/cbt-journal.env`:
 
 ```ini
 APP_PASSWORD=paste-the-generated-password-here
-COOKIE_SECURE=true
+COOKIE_SECURE=false
 ```
 
-Use `COOKIE_SECURE=true` when HTTPS terminates at a reverse proxy in front of the app. This is recommended for LAN and VPN access. The app server itself speaks HTTP, so the proxy should preserve the request `Host` header. `COOKIE_SECURE=false` is only suitable for a trusted, isolated network.
+This direct port 80 setup uses HTTP, so leave `COOKIE_SECURE=false`. Use it only over an encrypted VPN or a trusted isolated LAN. If HTTPS terminates at a reverse proxy, set `COOKIE_SECURE=true` and configure the proxy to preserve the request `Host` header; in that setup, change the app service back to an unprivileged port such as 8080 and have the proxy serve the public connection.
 
 Create `/etc/systemd/system/cbt-journal.service`:
 
@@ -70,12 +70,14 @@ Group=cbtjournal
 WorkingDirectory=/opt/cbt-journal
 EnvironmentFile=/etc/cbt-journal.env
 Environment=HOST=0.0.0.0
-Environment=PORT=8080
+Environment=PORT=80
 Environment=DATA_DIR=/var/lib/cbt-journal
 Environment=PYTHONDONTWRITEBYTECODE=1
 StateDirectory=cbt-journal
 StateDirectoryMode=0700
 UMask=0077
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
 ExecStart=/usr/bin/python3 /opt/cbt-journal/server.py
 Restart=on-failure
 RestartSec=3
