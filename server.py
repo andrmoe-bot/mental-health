@@ -124,12 +124,12 @@ class Handler(BaseHTTPRequestHandler):
                 return
             self.send_json(404, {"error": "Not found"})
             return
-        if path == "/" or path in ("/index.html", "/app.css", "/app.js", "/CONTENT_LICENSE.md"):
+        if path == "/" or path in ("/index.html", "/app.css", "/app.js", "/CONTENT_LICENSE.md", "/sources/Thought-Record.pdf", "/sources/Activity-Diary.pdf"):
             filename = "index.html" if path == "/" else path.lstrip("/")
             file_path = ROOT / filename
             if file_path.is_file():
                 body = file_path.read_bytes()
-                content_type = {".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8"}.get(file_path.suffix, "application/octet-stream")
+                content_type = {".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".md": "text/markdown; charset=utf-8", ".pdf": "application/pdf"}.get(file_path.suffix, "application/octet-stream")
                 self.send_response(200)
                 self.send_header("Content-Type", content_type)
                 self.send_header("Content-Length", str(len(body)))

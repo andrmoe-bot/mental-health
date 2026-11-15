@@ -103,7 +103,7 @@ function renderThoughtForm() {
         <div class="field"><label for="strength-after">How strong is it now? <span class="hint">0–100%</span></label><div class="range-wrap"><input id="strength-after" name="strengthAfter" type="range" min="0" max="100" value="40"><output class="range-value" for="strength-after">40%</output></div></div>
       </div>
       <hr class="form-divider"><div class="form-actions"><p class="form-note">You can save an unfinished reflection and come back to it.</p><button class="button primary" type="submit">Save reflection <span aria-hidden="true">→</span></button></div>
-      <p class="source-note">Adapted from Robert Fulton’s <a href="https://www.progresspsychotherapy.com/tools/" target="_blank" rel="noreferrer">Thought Record</a>, licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noreferrer">CC BY-SA 4.0</a>. Adapted for this app; see <a href="/CONTENT_LICENSE.md" target="_blank">content attribution</a>.</p>
+      <p class="source-note">Adapted from Robert Fulton’s <a href="/sources/Thought-Record.pdf" target="_blank">Thought Record (original PDF)</a>, licensed under CC BY-SA 4.0. See <a href="/CONTENT_LICENSE.md" target="_blank">content attribution</a>.</p>
     </form>`;
 }
 
@@ -120,7 +120,7 @@ function renderActivityForm() {
         <div class="field full-width"><label for="activity-note">Afterwards, how did it go? <span class="hint">Optional for now</span></label><textarea id="activity-note" name="reflection" placeholder="You can return to this later in your journal…"></textarea></div>
       </div>
       <hr class="form-divider"><div class="form-actions"><p class="form-note">A small, realistic plan is enough.</p><button class="button primary" type="submit">Save activity plan <span aria-hidden="true">→</span></button></div>
-      <p class="source-note">Adapted from Robert Fulton’s <a href="https://www.progresspsychotherapy.com/tools/" target="_blank" rel="noreferrer">Activity Diary</a>, licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noreferrer">CC BY-SA 4.0</a>. Adapted for this app; see <a href="/CONTENT_LICENSE.md" target="_blank">content attribution</a>.</p>
+      <p class="source-note">Adapted from Robert Fulton’s <a href="/sources/Activity-Diary.pdf" target="_blank">Activity Diary (original PDF)</a>, licensed under CC BY-SA 4.0. See <a href="/CONTENT_LICENSE.md" target="_blank">content attribution</a>.</p>
     </form>`;
 }
 

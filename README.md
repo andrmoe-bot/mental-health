@@ -2,6 +2,8 @@
 
 A private, single-user CBT reflection journal for a LAN or VPN. It has a thought record, a small activity planner, and a journal history. Journal entries are stored in a SQLite database on the host and shared across devices; the browser keeps only an authenticated session cookie.
 
+The app has no internet runtime dependency: the interface, styles, scripts, API, and original worksheet PDFs are served from this host. Once deployed, it works the same when the LAN has no internet connection.
+
 ## Run
 
 Requires Python 3.11 or newer. No third-party packages are needed.
