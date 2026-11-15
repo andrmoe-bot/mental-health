@@ -51,7 +51,7 @@ def password_matches(candidate: str) -> bool:
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "PersonalCBT/1.0"
+    server_version = "CBTJournal/1.0"
 
     def log_message(self, fmt: str, *args: object) -> None:
         # Avoid logging URLs or bodies that might contain personal information.
