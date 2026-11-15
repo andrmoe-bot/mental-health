@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f5ef">
+  <title>Stillpoint · Personal CBT journal</title>
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+  <div id="auth-screen" class="auth-screen" hidden>
+    <section class="auth-card" aria-labelledby="auth-title">
+      <div class="brand-mark large" aria-hidden="true">S</div>
+      <p class="eyebrow">YOUR PRIVATE SPACE</p>
+      <h1 id="auth-title">Welcome back.</h1>
+      <p class="muted">Sign in to continue to your journal. Your entries are stored on your server.</p>
+      <form id="login-form" class="stack-form">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required minlength="1" autofocus>
+        <button class="button primary full" type="submit">Sign in <span aria-hidden="true">→</span></button>
+        <p id="login-error" class="form-error" role="alert"></p>
+      </form>
+      <p class="tiny muted">A quiet place to notice, reflect, and take one small step.</p>
+    </section>
+  </div>
+
+  <div id="app" class="app-shell" hidden>
+    <aside class="sidebar">
+      <a class="brand" href="#home" aria-label="Stillpoint home">
+        <span class="brand-mark">S</span>
+        <span><strong>stillpoint</strong><small>personal journal</small></span>
+      </a>
+      <div class="sidebar-label">WORKSPACE</div>
+      <nav class="side-nav" aria-label="Main navigation">
+        <button class="nav-item active" data-view="home"><span class="nav-icon">⌂</span>Today</button>
+        <button class="nav-item" data-view="thought"><span class="nav-icon">◌</span>Thought record</button>
+        <button class="nav-item" data-view="activity"><span class="nav-icon">↗</span>Activity plan</button>
+        <button class="nav-item" data-view="journal"><span class="nav-icon">▤</span>My journal</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="privacy-card"><span class="privacy-dot"></span><div><strong>Private by design</strong><p>Saved on your server</p></div></div>
+        <button id="settings-button" class="nav-item settings-item"><span class="nav-icon">⚙</span>Data & settings</button>
+        <button id="logout-button" class="logout-button">Sign out <span aria-hidden="true">↗</span></button>
+      </div>
+    </aside>
+
+    <main class="main-column">
+      <header class="topbar">
+        <div class="mobile-brand"><span class="brand-mark">S</span><strong>stillpoint</strong></div>
+        <p id="top-date" class="top-date"></p>
+        <button id="mobile-settings" class="icon-button" aria-label="Data and settings">⚙</button>
+      </header>
+      <div id="view" class="view-content" tabindex="-1"></div>
+      <footer class="app-footer"><span>Take what helps. Leave the rest.</span><span>Personal reflection tool · Not a substitute for professional care</span></footer>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js" defer></script>
+</body>
+</html>
